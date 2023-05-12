@@ -46,7 +46,6 @@ const Home: NextPage = () => {
       <Head>
         <title>Rick and Morty App</title>
         <meta name="description" content="Rick and Morty App using Next.js, TypeScript, and Chakra UI" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar onSearch = {handleSearch} />
       <Characters onClose={onClose} characters={characters}/>

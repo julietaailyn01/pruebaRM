@@ -1,7 +1,8 @@
 import { useState } from 'react';
 // import { IconName } from "react-icons/fa";
-import Link from "next/link";
-import { Flex, FormControl, Input, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
+import { Flex, Box, Link, Button, Input, InputGroup, InputRightElement, FormControl } from "@chakra-ui/react";
+import { FaGithub } from 'react-icons/fa';
+
 
 
 export default function Nav({onSearch}){
@@ -11,31 +12,40 @@ export default function Nav({onSearch}){
       setCharacter(event.target.value)
    }
     return(
-        <nav>
-        <Flex alignItems="center">
-          <Link href="/"> Logout</Link>
-          <Link href="/Home"> Home</Link>
-          <Link href="/Favorites"> Favorites</Link>
-          <Link href="/About"> About Me</Link>
-          <a href="https://github.com/julietaailyn01" target="blank">GitHub</a>
-        </Flex>
-      
-        <FormControl>
-          <InputGroup size="md">
-            <Input
-              type="search"
-              placeholder="Search for ID"
-              value={character}
-              onChange={HandleChange}
-            />
-            <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => onSearch(character)}>
-                Add
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
-      </nav>
-      
-    )
+        <Box
+  position="fixed"
+  left={0}
+  top={0}
+  width="15rem"
+  height="100%"
+  bg="#1A202C"
+  color="white"
+  padding="1rem"
+  fontFamily="Roboto"
+>
+  <Flex alignItems="center" mb={4}>
+    <a href="https://github.com/julietaailyn01/pruebaRM" target="_blank">
+    <FaGithub size={32} color="#fff" /> GitHub
+    </a>
+  </Flex>
+
+  <FormControl>
+    <InputGroup size="md">
+      <Input
+        type="search"
+        placeholder="Buscar por id"
+        value={character}
+        onChange={HandleChange}
+      />
+      <InputRightElement width="4.5rem">
+      <Button bg="#1A202C" h="1.75rem" size="sm" colorScheme="teal" _hover={{bg: "#39FF14", color: "black"}} onClick={() => onSearch(character)}>
+  Buscar
+</Button>
+
+
+      </InputRightElement>
+    </InputGroup>
+  </FormControl>
+</Box>
+      );
 }
