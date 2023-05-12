@@ -1,47 +1,57 @@
-import { Heading, SimpleGrid } from '@chakra-ui/react';
-import { fechCharacter } from '../utils/api';
-import CharacterCard from '../components/CharacterCard';
-import { useQuery } from '@tanstack/react-query';
+import type { NextPage } from "next";
+import Head from "next/head";
+import Characters from "../components/Characters";
+import axios from "axios";
+import NavBar from "../components/Navbar";
+import { useState } from 'react';
 
 
-function Characters() {
-  const { data: characters, isLoading, isError } = useQuery(
-    {
-      queryKey: ['characters'],
-      queryFn: fechCharacter
-    }
-  );
+const Home: NextPage = () => {
 
-  if (isLoading) {
-    return (
-      <div>
-        <h1>Is Loading...</h1>
-      </div>
-    )
-  } else if (isError) {
-    return (
-      <div>
-        <h1>Error</h1>
-      </div>
-    )
-  } else {
-    return (
-      <>
-        <Heading as="h1" >
-          Personajes
-        </Heading>
-        <SimpleGrid columns={[1, 2, 3]}>
-          {
-            characters.map((character) => (
-              <div>
-                <CharacterCard key={character.id} character={character} />
-              </div>
-            ))
+  const[characters,setCharacters]= useState([]);
+    
+    function isRepetida(id) {
+        let aux = false;
+        characters.forEach((character) => {
+            if(character.id === id) aux = true;
+          });
+        return aux;
+        }
+
+  const handleSearch = async (character) => {
+    try {
+      const { data } = await axios.get(`https://rickandmortyapi.com/api/character/${character}`);
+      if (data.name) {
+        if(!isRepetida(data.id)){
+          setCharacters(oldChars => [...oldChars, data])
+          } else {
+              window.alert("No podes repetir personaje");
+            }
+          } else {
+            window.alert("No hay personaje con ese ID");
           }
-        </SimpleGrid>
-      </>
-    )
+        
+  }catch(err){
+    console.log(err);
   }
 }
 
-export default Characters;
+  const onClose = (id) =>{
+    setCharacters(
+      characters.filter(character => character.id !==id)
+    )
+  }
+  return (
+    <>
+      <Head>
+        <title>Rick and Morty App</title>
+        <meta name="description" content="Rick and Morty App using Next.js, TypeScript, and Chakra UI" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <NavBar onSearch = {handleSearch} />
+      <Characters onClose={onClose} characters={characters}/>
+    </>
+  );
+};
+
+export default Home;
